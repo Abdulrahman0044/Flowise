@@ -951,8 +951,9 @@ export class App {
             const retrievedAssistant = await openai.beta.assistants.retrieve(req.params.id)
             const resp = await openai.files.list()
             const existingFiles = resp.data ?? []
-
+            //@ts-ignore
             if (retrievedAssistant.file_ids && retrievedAssistant.file_ids.length) {
+                //@ts-ignore
                 ;(retrievedAssistant as any).files = existingFiles.filter((file) => retrievedAssistant.file_ids.includes(file.id))
             }
 
@@ -1051,6 +1052,7 @@ export class App {
                         instructions: assistantDetails.instructions,
                         model: assistantDetails.model,
                         tools,
+                        //@ts-ignore
                         file_ids: (assistantDetails.files ?? []).map((file: OpenAI.Files.FileObject) => file.id)
                     })
                     assistantDetails.id = newAssistant.id
@@ -1065,8 +1067,10 @@ export class App {
                         instructions: assistantDetails.instructions ?? '',
                         model: assistantDetails.model,
                         tools: filteredTools,
+                        //@ts-ignore
                         file_ids: uniqWith(
                             [
+                                //@ts-ignore
                                 ...retrievedAssistant.file_ids,
                                 ...(assistantDetails.files ?? []).map((file: OpenAI.Files.FileObject) => file.id)
                             ],
@@ -1182,7 +1186,9 @@ export class App {
                     instructions: assistantDetails.instructions,
                     model: assistantDetails.model,
                     tools: filteredTools,
+                    //@ts-ignore
                     file_ids: uniqWith(
+                        //@ts-ignore
                         [...retrievedAssistant.file_ids, ...(assistantDetails.files ?? []).map((file: OpenAI.Files.FileObject) => file.id)],
                         isEqual
                     )
